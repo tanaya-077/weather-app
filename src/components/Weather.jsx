@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "remixicon/fonts/remixicon.css";
 import { motion } from "framer-motion";
+
 const Weather = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [city, setCity] = useState("");
@@ -19,7 +20,7 @@ const Weather = () => {
     if (condition.includes("snow") || condition.includes("blizzard"))
       return "/assets/snow.png";
 
-    return "/assets/cloud.png"; 
+    return "/assets/cloud.png";
   };
 
   const search = async (cityName) => {
@@ -52,9 +53,7 @@ const Weather = () => {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.3, 
-      },
+      transition: { staggerChildren: 0.3 },
     },
   };
 
@@ -68,14 +67,15 @@ const Weather = () => {
   };
 
   return (
-    <div className="h-screen w-full flex justify-center items-center">
-      <div className="relative bg-[#3b32a0] rounded-lg p-5 shadow-lg shadow-gray-900">
+    <div className="h-screen w-full flex justify-center items-center bg-gradient-to-br from-purple-100 to-indigo-200">
+      <div className="relative bg-[#3b32a0] rounded-lg p-4 md:p-6 shadow-lg shadow-gray-900 w-[90vw] max-w-[400px]">
+        
         {/* Search Box */}
         <div className="search flex items-center mb-5">
           <input
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className="text-center text-lg font-semibold py-4 px-4 bg-white text-yellow-500 rounded-2xl mx-2"
+            className="text-center text-base md:text-lg font-semibold py-3 md:py-4 px-3 md:px-4 bg-white text-yellow-500 rounded-2xl mx-2 w-[70%]"
             type="text"
             placeholder="Search city"
           />
@@ -85,69 +85,61 @@ const Weather = () => {
             whileTap={{ scale: 0.8 }}
             transition={{ type: "spring", stiffness: 200, damping: 10 }}
             onClick={() => search(city)}
-            className="ri-search-line bg-white px-4 py-4 rounded-full text-yellow-500 text-xl font-bold cursor-pointer"
+            className="ri-search-line bg-white px-3 md:px-4 py-3 md:py-4 rounded-full text-yellow-500 text-xl font-bold cursor-pointer"
           ></motion.i>
         </div>
 
         {/* Weather Display */}
         {weatherData && (
-          <>
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="show"
-            >
-              <motion.img
+          <motion.div variants={containerVariants} initial="hidden" animate="show">
+            <motion.img
+              variants={childVariants}
+              className="w-[40vw] md:w-[15vw] mx-auto"
+              src={getWeatherImage(weatherData.condition)}
+              alt="Weather icon"
+            />
+
+            <motion.div variants={childVariants} className="mt-0">
+              <motion.p
                 variants={childVariants}
-                className="md:w-[15vw] mx-auto"
-                src={getWeatherImage(weatherData.condition)}
-                alt="Weather icon"
-              />
+                className="text-white text-2xl md:text-4xl text-center font-bold"
+              >
+                {weatherData.temperature}°C
+              </motion.p>
+              <motion.p
+                variants={childVariants}
+                className="text-white text-xl md:text-3xl text-center"
+              >
+                {weatherData.city}
+              </motion.p>
 
-              <motion.div variants={childVariants} className="mt-0">
-                <motion.p
+              <div className="w-full mt-8 px-2 flex justify-between">
+                {/* Humidity */}
+                <motion.div
                   variants={childVariants}
-                  className="text-white text-4xl text-center font-bold"
+                  className="flex flex-col items-center justify-center"
                 >
-                  {weatherData.temperature}°C
-                </motion.p>
-                <motion.p
+                  <img src="/assets/humidity.png" alt="humidity" className="w-8" />
+                  <div className="flex flex-col items-center">
+                    <p className="text-yellow-300 font-semibold">{weatherData.humidity}%</p>
+                    <span className="text-white text-sm">Humidity</span>
+                  </div>
+                </motion.div>
+
+                {/* Wind */}
+                <motion.div
                   variants={childVariants}
-                  className="text-white text-3xl text-center"
+                  className="flex flex-col items-center justify-center"
                 >
-                  {weatherData.city}
-                </motion.p>
-
-                <div className="w-full mt-10 px-4 flex justify-between">
-                  <motion.div
-                    variants={childVariants}
-                    className="col1 flex flex-col items-center justify-center"
-                  >
-                    <img
-                      src="/assets/humidity.png"
-                      alt="humidity"
-                      className="w-8"
-                    />
-                    <div className="flex flex-col items-center justify-center">
-                      <p className="text-yellow-300 font-semibold">{weatherData.humidity}%</p>
-                      <span className="text-white">Humidity</span>
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    variants={childVariants}
-                    className="col2 flex flex-col items-center justify-center"
-                  >
-                    <img src="/assets/wind.png" alt="wind" className="w-8" />
-                    <div className="flex flex-col items-center justify-center">
-                      <p className="text-yellow-300 font-semibold">{weatherData.wind} km/h</p>
-                      <span className="text-white">Wind Speed</span>
-                    </div>
-                  </motion.div>
-                </div>
-              </motion.div>
+                  <img src="/assets/wind.png" alt="wind" className="w-8" />
+                  <div className="flex flex-col items-center">
+                    <p className="text-yellow-300 font-semibold">{weatherData.wind} km/h</p>
+                    <span className="text-white text-sm">Wind Speed</span>
+                  </div>
+                </motion.div>
+              </div>
             </motion.div>
-          </>
+          </motion.div>
         )}
       </div>
     </div>
