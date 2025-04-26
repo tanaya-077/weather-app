@@ -99,7 +99,7 @@ const Weather = () => {
             >
               <motion.img
                 variants={childVariants}
-                className="md:w-[15vw] w-[20vh] mx-auto"
+                className="md:w-[15vw] mx-auto"
                 src={getWeatherImage(weatherData.condition)}
                 alt="Weather icon"
               />
