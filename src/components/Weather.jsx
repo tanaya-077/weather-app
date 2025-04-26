@@ -24,7 +24,7 @@ const Weather = () => {
 
   const search = async (cityName) => {
     try {
-      const url = `http://api.weatherapi.com/v1/current.json?key=${
+      const url = `https://api.weatherapi.com/v1/current.json?key=${
         import.meta.env.VITE_APP_ID
       }&q=${cityName}`;
       const response = await fetch(url);
